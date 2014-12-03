@@ -1,10 +1,10 @@
 module API
 	module V1
 		class Base < Grape::API
-
+			
 			### Handling Error Exception
 			before do 
-				error!('401 Unauthorized', 401) unless headers['Password'] == 'spriteXchange'
+				# error!('401 Unauthorized', 401) unless headers['Password'] == 'spriteXchange'
 			end
 
 			# route :any, '*path' do

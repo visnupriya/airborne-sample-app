@@ -1,4 +1,3 @@
-
 module API
 	module V1
 		class Events < Grape::API
@@ -8,34 +7,37 @@ module API
 
 			format :json
 
-			desc "Simple Hello World"
-			resource :hello do
-				get do
-					## Error Handling
-					# error!('Unauthorized', 401) unless headers['Password'] == 'spriteXchange'
-					{ hello: "Spritle" }
-				end
+			before do 
+				error!('401 Unauthorized', 401) unless headers['Password'] == 'spritle'
 			end
 
 			### Using namspace or resource to define routes
 			namespace :events do
 				desc "Return list of events"
 				get :list do 
-					Event.all
+					events = Event.all
+					present :success, true
+					present :events, events
 				end
 
 				get ':id', requirements: { id: /[0-9]*/ } do
-					Event.find(params[:id])
+					event = Event.find(params[:id])
+					present :success, true
+					present :event, event
 				end
 
 				post 'create' do 
-					before do 
-					end
-					post = Event.create(params[:event])
+					post = Event.create!(params[:event])
+					present :success, true
+					present :message, "successfully deleted"
 				end
 
-				delete '/' do 
-
+				delete ':id' do 
+					p "delete----------"
+					event = Event.find(params[:id])
+					event.delete
+					present :success, true
+					present :message, "successfully deleted"
 				end
 
 			end
